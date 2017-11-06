@@ -2110,10 +2110,9 @@ function send_temp_file($path, $filename, $pathisstring=false) {
         core_shutdown_manager::register_function('send_temp_file_finished', array($path));
     }
 
-    // if user is using IE, urlencode the filename so that multibyte file name will show up correctly on popup
-    if (core_useragent::is_ie()) {
-        $filename = urlencode($filename);
-    }
+    // According to RFC-6266(4.3), 'filename' should encode.
+    // http://www.ietf.org/rfc/rfc6266.txt
+    $filename = urlencode($filename);
 
     header('Content-Disposition: attachment; filename="'.$filename.'"');
     if (is_https()) { // HTTPS sites - watch out for IE! KB812935 and KB316431.
@@ -2259,10 +2258,9 @@ function send_file($path, $filename, $lifetime = null , $filter=0, $pathisstring
         $mimetype = get_mimetype_for_sending($filename);
     }
 
-    // if user is using IE, urlencode the filename so that multibyte file name will show up correctly on popup
-    if (core_useragent::is_ie()) {
-        $filename = rawurlencode($filename);
-    }
+    // According to RFC-6266(4.3), 'filename' should encode.
+    // http://www.ietf.org/rfc/rfc6266.txt
+    $filename = rawurlencode($filename);
 
     if ($forcedownload) {
         header('Content-Disposition: attachment; filename="'.$filename.'"');
